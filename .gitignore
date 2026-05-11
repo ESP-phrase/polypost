@@ -1,0 +1,58 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Next.js build output
+.next/
+out/
+build/
+
+# Production
+dist/
+
+# Environment — DO NOT COMMIT, contains Resend key + Neon credentials
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+
+# Local sqlite db (Postgres on Neon is the source of truth now)
+dev.db
+dev.db-journal
+*.db
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Editors
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Vercel
+.vercel
+
+# Prisma generated client (gets regenerated on install)
+# node_modules/.prisma is already covered by node_modules/
+
+# Local config (per-developer, e.g. Claude Code launch profiles)
+.claude/
+
+# Caches
+.turbo/
+.cache/
+
+# Coverage
+coverage/

@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #000000;
+  --color-bg-2: #070707;
+  --color-surface: #0c0c0c;
+  --color-surface-2: #141414;
+  --color-surface-3: #1c1c1c;
+  --color-border: #1a1a1a;
+  --color-border-strong: #262626;
+  --color-text: #f3f3f3;
+  --color-muted: #7a7a7a;
+  --color-muted-2: #525252;
+
+  --color-accent: #bef848;
+  --color-accent-2: #a3e635;
+  --color-accent-dim: rgba(190, 248, 72, 0.08);
+  --color-accent-border: rgba(190, 248, 72, 0.25);
+
+  --color-success: #4ade80;
+  --color-warning: #fbbf24;
+  --color-danger: #f87171;
+  --color-info: #60a5fa;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html, body {
+  background: #000;
+  color: #f3f3f3;
+  -webkit-font-smoothing: antialiased;
+  font-size: 14px;
+  font-family: -apple-system, system-ui, "Segoe UI", Inter, sans-serif;
+}
+
+/* No body-wide gradient. Sections own their own atmosphere. */
+
+::selection {
+  background: rgba(190, 248, 72, 0.35);
+  color: #000;
+}
+
+input, select, textarea {
+  background: #0a0a0a;
+  color: #f3f3f3;
+  border: 1px solid #262626;
+  border-radius: 10px;
+  padding: 0.7rem 0.95rem;
+  width: 100%;
+  font: inherit;
+  transition: border-color 150ms, box-shadow 150ms;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #bef848;
+  box-shadow: 0 0 0 3px rgba(190, 248, 72, 0.15);
+}
+input::placeholder, textarea::placeholder {
+  color: #525252;
+}
+
+a { color: inherit; }
+
+/* Subtler than the typical "neon halo on every accent". */
+.glow-accent {
+  box-shadow: 0 0 0 1px rgba(190, 248, 72, 0.18), 0 6px 18px -6px rgba(190, 248, 72, 0.25);
+}
+
+.bg-accent-grad {
+  background: linear-gradient(135deg, #bef848 0%, #a3e635 100%);
+}
+
+/* Solid, not gradient — gradient cards are the AI-template tell. */
+.bg-card-grad {
+  background: #0c0c0c;
+}

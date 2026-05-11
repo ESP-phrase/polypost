@@ -1,0 +1,105 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                  String           @id @default(cuid())
+  email               String           @unique
+  name                String
+  stripeCustomerId    String?
+  plan                String           @default("FREE")
+  subscriptionStatus  String           @default("INACTIVE")
+  subscriptionId      String?
+  currentPeriodEnd    DateTime?
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+
+  sessions            Session[]
+  socialAccounts      SocialAccount[]
+  posts               Post[]
+}
+
+model Session {
+  id          String   @id @default(cuid())
+  userId      String
+  token       String   @unique
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([userId])
+}
+
+model OtpToken {
+  id         String   @id @default(cuid())
+  email      String
+  code       String
+  expiresAt  DateTime
+  used       Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@index([email])
+}
+
+model SocialAccount {
+  id            String   @id @default(cuid())
+  userId        String
+  provider      String   // "twitter" | "linkedin" | "instagram" | "facebook" | "threads" | "bluesky" | "mastodon"
+  providerAccountId String
+  displayName   String
+  handle        String?
+  avatarUrl     String?
+  accessToken   String?
+  refreshToken  String?
+  tokenExpiresAt DateTime?
+  status        String   @default("CONNECTED") // CONNECTED | DISCONNECTED | EXPIRED
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  targets       PostTarget[]
+
+  @@unique([userId, provider, providerAccountId])
+  @@index([userId])
+}
+
+model Post {
+  id           String   @id @default(cuid())
+  userId       String
+  body         String
+  mediaUrlsJson String  @default("[]")
+  status       String   @default("DRAFT") // DRAFT | SCHEDULED | PUBLISHING | PUBLISHED | FAILED
+  scheduledAt  DateTime?
+  publishedAt  DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  targets      PostTarget[]
+
+  @@index([userId, status])
+  @@index([scheduledAt])
+}
+
+model PostTarget {
+  id              String   @id @default(cuid())
+  postId          String
+  socialAccountId String
+  status          String   @default("PENDING") // PENDING | PUBLISHING | PUBLISHED | FAILED
+  externalPostId  String?
+  externalUrl     String?
+  errorMessage    String?
+  publishedAt     DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  post           Post           @relation(fields: [postId], references: [id], onDelete: Cascade)
+  socialAccount  SocialAccount  @relation(fields: [socialAccountId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, socialAccountId])
+  @@index([status])
+}
