@@ -10,8 +10,11 @@ export const maxDuration = 60; // Vercel: allow up to 60s per cron run
  * Picks up SCHEDULED posts whose `scheduledAt` has passed and publishes them
  * via the same provider pipeline as immediate posts.
  *
- * Auth: Vercel Cron adds `x-vercel-cron: 1` header automatically. For local
- * dev or manual triggers, accept a `?secret=` matching `CRON_SECRET` env.
+ * Auth: requires `Authorization: Bearer <CRON_SECRET>`. Vercel Cron sends this
+ * automatically when CRON_SECRET is set as an env var. For local dev or manual
+ * triggers, also accept `?secret=` matching `CRON_SECRET`.
+ *
+ * Without CRON_SECRET configured this endpoint refuses all requests (fail-closed).
  */
 export async function GET(req: Request) {
   if (!authorize(req)) {
@@ -107,10 +110,14 @@ export async function GET(req: Request) {
 }
 
 function authorize(req: Request): boolean {
-  const header = req.headers.get("x-vercel-cron");
-  if (header) return true;
-  const url = new URL(req.url);
-  const secret = url.searchParams.get("secret");
   const expected = process.env.CRON_SECRET;
-  return Boolean(expected && secret === expected);
+  if (!expected) return false; // fail-closed when not configured
+
+  // Vercel Cron sends Authorization: Bearer <CRON_SECRET> automatically.
+  const auth = req.headers.get("authorization");
+  if (auth === `Bearer ${expected}`) return true;
+
+  // Allow ?secret= for local manual testing.
+  const url = new URL(req.url);
+  return url.searchParams.get("secret") === expected;
 }

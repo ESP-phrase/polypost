@@ -71,34 +71,55 @@ export function ConnectionsGrid({
         const meta = PROVIDERS[id];
         const linked = byProvider[id] ?? [];
         const isLive = liveProviders[id] ?? false;
+        const isAvailable = meta.available;
         return (
-          <div key={id} className="bg-[var(--color-bg-2)] border border-[var(--color-border)] rounded-xl p-5 hover:border-[var(--color-border-strong)] transition-colors">
+          <div
+            key={id}
+            className={`bg-[var(--color-bg-2)] border border-[var(--color-border)] rounded-xl p-5 transition-colors ${
+              isAvailable ? "hover:border-[var(--color-border-strong)]" : "opacity-60"
+            }`}
+          >
             <div className="flex items-start gap-3">
               <SocialLogo provider={id} size={44} variant="chip" rounded={10} className="shrink-0" />
               <div className="min-w-0 flex-1">
-                <div className="font-bold flex items-center gap-2">
+                <div className="font-bold flex items-center gap-2 flex-wrap">
                   {meta.label}
-                  <span
-                    className={`text-[0.55rem] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded ${
-                      isLive
-                        ? "bg-[var(--color-accent-dim)] text-[var(--color-accent)] border border-[var(--color-accent-border)]"
-                        : "bg-[var(--color-surface-2)] text-[var(--color-muted-2)] border border-[var(--color-border)]"
-                    }`}
-                  >
-                    {isLive ? "Live" : "Sandbox"}
-                  </span>
+                  {!isAvailable ? (
+                    <span className="text-[0.55rem] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded bg-[var(--color-surface-2)] text-[var(--color-muted)] border border-[var(--color-border)]">
+                      Coming soon
+                    </span>
+                  ) : (
+                    <span
+                      className={`text-[0.55rem] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded ${
+                        isLive
+                          ? "bg-[var(--color-accent-dim)] text-[var(--color-accent)] border border-[var(--color-accent-border)]"
+                          : "bg-[var(--color-surface-2)] text-[var(--color-muted-2)] border border-[var(--color-border)]"
+                      }`}
+                    >
+                      {isLive ? "Live" : "Sandbox"}
+                    </span>
+                  )}
                 </div>
                 <div className="text-[var(--color-muted)] text-xs">
                   {meta.charLimit?.toLocaleString() ?? "Any length"} chars · media supported
                 </div>
               </div>
-              <button
-                onClick={() => (isLive ? connectLive(id) : connectSandbox(id))}
-                disabled={busy === id || isPending}
-                className="text-xs font-bold px-3 py-1.5 rounded-md bg-[var(--color-accent-dim)] text-[var(--color-accent)] border border-[var(--color-accent-border)] hover:bg-[var(--color-accent)] hover:text-black transition-colors disabled:opacity-60"
-              >
-                {busy === id ? "Connecting…" : "+ Connect"}
-              </button>
+              {isAvailable ? (
+                <button
+                  onClick={() => (isLive ? connectLive(id) : connectSandbox(id))}
+                  disabled={busy === id || isPending}
+                  className="text-xs font-bold px-3 py-1.5 rounded-md bg-[var(--color-accent-dim)] text-[var(--color-accent)] border border-[var(--color-accent-border)] hover:bg-[var(--color-accent)] hover:text-black transition-colors disabled:opacity-60"
+                >
+                  {busy === id ? "Connecting…" : "+ Connect"}
+                </button>
+              ) : (
+                <span
+                  className="text-xs font-semibold px-3 py-1.5 rounded-md bg-[var(--color-surface)] text-[var(--color-muted-2)] border border-[var(--color-border)] cursor-not-allowed"
+                  title="Publishing to this network is coming soon"
+                >
+                  Soon
+                </span>
+              )}
             </div>
 
             {linked.length > 0 && (

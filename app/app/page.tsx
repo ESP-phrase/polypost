@@ -69,9 +69,9 @@ export default async function ComposePage() {
           />
           <div className="text-center mt-6 text-[var(--color-muted-2)] text-xs">
             <span aria-hidden className="mr-1">?</span>
-            Need help?{" "}
-            <a href="#" className="text-[var(--color-accent)] hover:underline">
-              View our guide ↗
+            Stuck? Email{" "}
+            <a href="mailto:hello@polypost.dev" className="text-[var(--color-accent)] hover:underline">
+              hello@polypost.dev
             </a>
           </div>
         </>

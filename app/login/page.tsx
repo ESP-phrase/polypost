@@ -252,8 +252,8 @@ function LoginForm() {
 
           <p className="text-center text-[11px] text-[var(--color-muted-2)] mt-8">
             By continuing, you agree to our{" "}
-            <Link href="#" className="underline hover:text-[var(--color-muted)]">Terms</Link>{" "}and{" "}
-            <Link href="#" className="underline hover:text-[var(--color-muted)]">Privacy Policy</Link>.
+            <Link href="/terms" className="underline hover:text-[var(--color-muted)]">Terms</Link>{" "}and{" "}
+            <Link href="/privacy" className="underline hover:text-[var(--color-muted)]">Privacy Policy</Link>.
           </p>
         </div>
       </div>

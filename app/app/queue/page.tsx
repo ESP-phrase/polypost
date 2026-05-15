@@ -81,9 +81,12 @@ export default async function QueuePage() {
                       );
                     })}
                   </div>
-                  <Link href="#" className="text-[var(--color-muted)] hover:text-[var(--color-text)] text-xs">
-                    Edit
-                  </Link>
+                  <span
+                    className="text-[var(--color-muted-2)] text-xs cursor-not-allowed"
+                    title="Editing scheduled posts is coming soon"
+                  >
+                    Edit · soon
+                  </span>
                 </div>
               </div>
             </div>

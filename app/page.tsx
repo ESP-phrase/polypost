@@ -70,20 +70,59 @@ export default function LandingPage() {
 
       {/* Platform strip */}
       <section id="platforms" className="max-w-[1400px] mx-auto px-6 md:px-10 pb-20">
-        <div className="text-center mb-8">
-          <div className="text-[var(--color-muted)] text-[0.7rem] uppercase tracking-wider font-bold">
-            Ships to every network you care about
+        <div className="text-center mb-10">
+          <div className="text-[var(--color-accent)] text-[0.7rem] uppercase tracking-wider font-bold mb-2">
+            Available today
           </div>
+          <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight">
+            Start with X. More networks rolling out weekly.
+          </h2>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-3">
-          {ALL_PROVIDERS.map((id) => {
+
+        {/* Available now */}
+        <div className="grid grid-cols-1 max-w-md mx-auto mb-10">
+          {ALL_PROVIDERS.filter((id) => PROVIDERS[id].available).map((id) => {
             const p = PROVIDERS[id];
             return (
-              <div key={id} className="bg-[var(--color-bg-2)] border border-[var(--color-border)] rounded-xl p-4 flex flex-col items-center gap-2.5 hover:border-[var(--color-border-strong)] transition-colors">
-                <SocialLogo provider={id} size={36} variant="chip" rounded={10} />
+              <div
+                key={id}
+                className="bg-[var(--color-bg-2)] border-2 border-[var(--color-accent-border)] rounded-xl p-5 flex items-center gap-4 hover:border-[var(--color-accent)] transition-colors"
+              >
+                <SocialLogo provider={id} size={48} variant="chip" rounded={12} />
+                <div className="flex-1 min-w-0">
+                  <div className="font-bold flex items-center gap-2">
+                    {p.label}
+                    <span className="text-[0.55rem] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded bg-[var(--color-accent-dim)] text-[var(--color-accent)] border border-[var(--color-accent-border)]">
+                      Live
+                    </span>
+                  </div>
+                  <div className="text-[var(--color-muted)] text-xs mt-0.5">
+                    {p.charLimit?.toLocaleString()} chars · OAuth-authorized · scheduled or instant
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Coming soon */}
+        <div className="text-center mb-5">
+          <div className="text-[var(--color-muted-2)] text-[0.7rem] uppercase tracking-wider font-bold">
+            Rolling out soon
+          </div>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3 opacity-70">
+          {ALL_PROVIDERS.filter((id) => !PROVIDERS[id].available).map((id) => {
+            const p = PROVIDERS[id];
+            return (
+              <div
+                key={id}
+                className="bg-[var(--color-bg-2)] border border-[var(--color-border)] rounded-xl p-4 flex flex-col items-center gap-2.5"
+              >
+                <SocialLogo provider={id} size={32} variant="chip" rounded={9} />
                 <div className="font-semibold text-xs">{p.label}</div>
-                <div className="text-[var(--color-muted-2)] text-[0.6rem]">
-                  {p.charLimit ? `${p.charLimit.toLocaleString()} chars` : "any length"}
+                <div className="text-[var(--color-muted-2)] text-[0.55rem] uppercase tracking-wider font-bold">
+                  Soon
                 </div>
               </div>
             );
@@ -234,10 +273,9 @@ export default function LandingPage() {
             <span className="text-[var(--color-muted-2)] ml-2">© 2026</span>
           </div>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-[var(--color-text)]">Privacy</a>
-            <a href="#" className="hover:text-[var(--color-text)]">Terms</a>
-            <a href="#" className="hover:text-[var(--color-text)]">Status</a>
-            <a href="#" className="hover:text-[var(--color-text)]">Twitter</a>
+            <Link href="/privacy" className="hover:text-[var(--color-text)] no-underline">Privacy</Link>
+            <Link href="/terms" className="hover:text-[var(--color-text)] no-underline">Terms</Link>
+            <a href="mailto:hello@polypost.dev" className="hover:text-[var(--color-text)]">Contact</a>
           </div>
         </div>
       </footer>
